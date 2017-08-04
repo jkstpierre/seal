@@ -97,7 +97,7 @@ uint8_t inv_sbox[256] = {
 };
 
 /*
-	Substitute the bytes of a block with the SEAL-128 S-Box
+	Substitute the bytes of a block with the SEAL S-Box
 */
 void S(uint32_t *block){
     for(int i = 0; i < 4; i++){
