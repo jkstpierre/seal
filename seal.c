@@ -51,7 +51,7 @@
 
 /*
     SEAL Substitution Box
-    NOTE: The S-box provided here was generted via a brute-force search for an S-box
+    NOTE: The S-box provided here was generated via a brute-force search for an S-box
           with good avalanche effect and bit distribution. Any S-box will work for SEAL
           provided it has the aforementioned properties.
 */
