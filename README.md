@@ -27,7 +27,9 @@ This benchmark was taken on a standard laptop using an i7-7500U 2.7 Ghz Quad Cor
 
 # Contact
 Name: Joseph St. Pierre
+
 School: Worcester Polytechnic Institute
+
 Email: jkstpierre@wpi.edu
 
 Please contact me if you discover any bugs in the implementation, or any vulnerabilities in the cipher design.
