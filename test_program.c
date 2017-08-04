@@ -16,8 +16,15 @@ int main(int argc, char** args){
 	uint32_t key[4] = {0x00, 0x00, 0x00, 0x00};
 	uint32_t block[4] = {0x00, 0x00, 0x10, 0x00};
 
+	seal_encrypt(block, key);
 
+	printBytes(block, HEX);
+	printf("\n");
+
+	seal_decrypt(block, key);
+
+	printBytes(block, HEX);
+	printf("\n");
 
 	return 0;
 }
-

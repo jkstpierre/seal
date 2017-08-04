@@ -148,7 +148,7 @@ void seal_encrypt(uint32_t block[4], const uint32_t key[4]){
 		block[3] += carry;
 		carry = block[3];
 
-		//Shift the blocks
+		//Rotate the blocks
 		block[3] = block[2];
 		block[2] = block[1];
 		block[1] = block[0];
@@ -214,4 +214,3 @@ void seal_decrypt(uint32_t block[4], const uint32_t key[4]){
 		INV_S(&block[0]);	//Invert first block through S-box
 	}
 }
-

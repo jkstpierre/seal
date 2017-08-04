@@ -17,7 +17,7 @@
 
 	NOTE: Assumes array has four elements! If this is not the case, undefined behavior will occur.
 */
-void generateRandomWord128(uint32_t blocks[4]);
+void generateRandomBits128(uint32_t blocks[4]);
 
 enum PRINT_MODE{
 	BIN = 0,
@@ -35,9 +35,26 @@ void printBytes(uint32_t blocks[4], int mode);
 /*
 	Convert a 16 byte string into an array of four 32-bit chunks (i.e. block)
 
-	NOTE: Assumes the provided string is 16 bytes! If this is not the case, undefined behavior will occur.
-*/
+	No resource allocation is done inside this method.
 
+	NOTE:
+		Assumes the provided string is 16 bytes! If this is not the case, undefined behavior will occur.
+		Assumes the provided block has 4 32-bit chunks and that each chunk is initialized to zero! If this is not the case,
+		undefined behavior will occur.
+*/
+void stringToBlock(uint32_t *block, const char *str);
+
+/*
+	Convert a 128 bit block into a 16 byte string
+
+	No resource allocation is done inside this method.
+
+	NOTE:
+		Assumes the provided string is 16 bytes! If this is not the case, undefined behavior will occur.
+		Assumes the provided block has 4 32-bit chunks and that each chunk is initialized to zero! If this is not the case,
+		undefined behavior will occur.
+*/
+void blockToString(char *str, const uint32_t *block);
 
 /*
 	Start timer for performance measurement
@@ -49,4 +66,3 @@ void startClock();
 */
 float stopClock();
 #endif
-
