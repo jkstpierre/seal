@@ -91,4 +91,3 @@ void seal_encrypt(uint32_t block[4], const uint32_t key[4]);
 void seal_decrypt(uint32_t block[4], const uint32_t key[4]);
 
 #endif
-

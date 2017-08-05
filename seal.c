@@ -102,7 +102,7 @@ uint8_t inv_sbox[256] = {
 void S(uint32_t *block){
     for(int i = 0; i < 4; i++){
         uint8_t byte = (uint8_t)(*block >> 8*i);
-        *block = *block & ~(0b11111111 << 8*i);   //Clear the bits
+        *block = *block & ~(0xFF << 8*i);   //Clear the bits
         *block |= ((uint32_t)sbox[byte] << 8*i); //Substitute the byte
     }
 }
@@ -113,7 +113,7 @@ void S(uint32_t *block){
 void INV_S(uint32_t *block){
     for(int i = 0; i < 4; i++){
         uint8_t byte = (uint8_t)(*block >> 8*i);
-        *block = *block & ~(0b11111111 << 8*i);   //Clear the bits
+        *block = *block & ~(0xFF << 8*i);   //Clear the bits
         *block |= ((uint32_t)inv_sbox[byte] << 8*i); //Substitute the byte
     }
 }
@@ -138,12 +138,18 @@ void seal_encrypt(uint32_t block[4], const uint32_t key[4]){
 		block[0] ^= key[i&0b11];  //Compute the XOR on the block
 		carry = block[0];	//Set the carry
 
+        carry = (carry >> 11) | (carry << (32 - 11));   //Rotate the carry
+
         //Permute subsequent blocks using modular addition in the finite field 2^32
 		block[1] += carry;
 		carry = block[1];
 
+        carry = (carry >> 11) | (carry << (32 - 11));
+
 		block[2] += carry;
 		carry = block[2];
+
+        carry = (carry >> 11) | (carry << (32 - 11));
 
 		block[3] += carry;
 		carry = block[3];
@@ -202,12 +208,15 @@ void seal_decrypt(uint32_t block[4], const uint32_t key[4]){
 		block[3] = carry;
 
 		carry = block[2];	//Set carry to the third block
+        carry = (carry >> 11) | (carry << (32 - 11));
 		block[3] -= carry;	//Subtract carry from fourth block
 
 		carry = block[1];	//Set carry to the second block
+        carry = (carry >> 11) | (carry << (32 - 11));
 		block[2] -= carry;	//Subtract carry from third block
 
 		carry = block[0];	//Set carry to the first block
+        carry = (carry >> 11) | (carry << (32 - 11));
 		block[1] -= carry;	//Subtract carry from second block
 
 		block[0] ^= key[i&0b11];	//XOR first block by round key

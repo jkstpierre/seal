@@ -23,7 +23,7 @@ void printBytes(uint32_t blocks[4], int mode){
 		return;
 
 	int i;
-	for(i = 0; i < 4; i++){
+	for(i = 3; i >= 0; i--){
 		uint32_t block = blocks[i];
 		if(mode == BIN){
 			int j;
