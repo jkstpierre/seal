@@ -1,7 +1,9 @@
 #include "seal_utility.h"
+#include "seal.h"
 
 #include <sodium.h>
 #include <time.h>
+#include <stdlib.h>
 
 /*
 	Generate 128 bits of uniformly distributed random data
@@ -35,7 +37,7 @@ void printBytes(uint32_t blocks[4], int mode){
 			printf("%09d", block);
 		}
 		else{
-			printf("%08X", block);
+			printf("%08x", block);
 		}
 	}
 }
@@ -94,4 +96,68 @@ float stopClock(){
 	clock_t end_time = clock();
 
 	return (1000.0*(end_time - start_time) )/ CLOCKS_PER_SEC;
+}
+
+/*
+	Test bit distribution for a particular key
+*/
+void test_distribution(size_t N, const uint32_t *key){
+	double bits[128] = {0.0};	//Initialize bits to 0
+
+	for(size_t i = 0; i < N; i++){
+		uint32_t block[4];
+		generateRandomBits128(block);	//Fill block with random bits
+
+		seal_encrypt(block, key);	//Encrypt the block
+
+		for(int j = 0; j < 128; j++){
+			bits[j] += (double)((block[j/32] >> (j%32)) & 1);
+		}
+	}
+
+	for(int i = 0; i < 128; i++){
+		bits[i] /= (double)N;
+		printf("Bit %d: %lf\n", i, bits[i]);
+	}
+}
+
+/*
+	Test bit divergence for a particular key
+*/
+void test_divergence(size_t N, const uint32_t *key){
+	double average_divergence = 0.0;
+
+	for(size_t i = 0; i < N; i++){
+		uint32_t block[4];
+		generateRandomBits128(block);	//Generate random block
+
+		uint32_t test_block[4] = {block[0], block[1], block[2], block[3]};	//Copy the block to a test_block
+		uint32_t comp_block[4] = {block[0], block[1], block[2], block[3]};	//Comparator block
+		seal_encrypt(block, key);	//Encrypt the original block
+
+		double count = 0.0;
+		for(int j = 0; j < 128; j++){
+			test_block[j/32] ^= (1 << (j%32));	//Toggle the bit
+
+			seal_encrypt(test_block, key);	//Encrypt the test block
+
+			//Compute the divergence
+			for(int k = 0; k < 128; k++){
+				count += (double)(((test_block[j/32] >> (j%32))&1) != ((block[j/32] >> (j%32))&1));
+			}
+
+			//Reset the test block
+			test_block[0] = comp_block[0];
+			test_block[1] = comp_block[1];
+			test_block[2] = comp_block[2];
+			test_block[3] = comp_block[3];
+		}
+
+		count /= 16384.0;	//Compute average divergence for single block
+
+		average_divergence += count;
+	}
+
+	average_divergence /= (double)N;	//Find total average divergence
+	printf("Average Divergence across %lu samples: %lf%%\n", N, average_divergence*100.0);
 }

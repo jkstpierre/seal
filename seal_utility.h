@@ -10,6 +10,7 @@
 */
 
 #include <inttypes.h>
+#include <stddef.h>
 
 /*
 	Generate 128 bits of uniformly distributed random data.
@@ -65,4 +66,14 @@ void startClock();
 	Stop timer and get time in milliseconds since last call to startClock
 */
 float stopClock();
+
+/*
+	Test bit distribution for a particular key
+*/
+void test_distribution(size_t N, const uint32_t *key);
+
+/*
+	Test bit divergence for a particular key
+*/
+void test_divergence(size_t N, const uint32_t *key);
 #endif
