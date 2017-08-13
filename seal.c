@@ -132,10 +132,10 @@ void seal_encrypt(uint32_t block[4], const uint32_t key[4]){
 	uint32_t carry = 0;	//The carry block for permutation
 
 	//For each round of encryption
-	size_t i;
+	uint32_t i;
 	for(i = 0; i < ROUND_COUNT; i++){
 		S(&block[0]);	//Run first block through the S-box
-		block[0] ^= key[i&0b11];  //Compute the XOR on the block
+		block[0] ^= key[i&0b11] ^ i;  //Compute the XOR on the block
 		carry = block[0];	//Set the carry
 
         carry = (carry >> 11) | (carry << (32 - 11));   //Rotate the carry

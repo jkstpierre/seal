@@ -124,7 +124,7 @@ void test_distribution(size_t N, const uint32_t *key){
 /*
 	Test bit divergence for a particular key
 */
-void test_divergence(size_t N, const uint32_t *key){
+void test_block_divergence(size_t N, const uint32_t *key){
 	double average_divergence = 0.0;
 
 	for(size_t i = 0; i < N; i++){

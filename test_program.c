@@ -15,8 +15,17 @@ int main(int argc, char** args){
 
 	uint32_t key[4];
 	generateRandomBits128(key);
-	test_distribution(100000, key);
-	test_divergence(10000, key);
+	test_distribution(10000, key);
+	test_block_divergence(1000, key);
+
+	uint32_t block[4];
+	generateRandomBits128(block);
+
+	startClock();
+	for(int i = 0; i < 10000000; i++){
+		seal_encrypt(block, key);
+	}
+	printf("Took %lf milleseconds to encrypt 160 million bytes...\n",stopClock());
 
 	return 0;
 }

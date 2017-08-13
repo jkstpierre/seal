@@ -75,5 +75,10 @@ void test_distribution(size_t N, const uint32_t *key);
 /*
 	Test bit divergence for a particular key
 */
-void test_divergence(size_t N, const uint32_t *key);
+void test_block_divergence(size_t N, const uint32_t *key);
+
+/*
+	Test bit divergence for a particular block
+*/
+void test_key_divergence(size_t N, const uint32_t *block);
 #endif
