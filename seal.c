@@ -219,7 +219,7 @@ void seal_decrypt(uint32_t block[4], const uint32_t key[4]){
         carry = (carry >> 11) | (carry << (32 - 11));
 		block[1] -= carry;	//Subtract carry from second block
 
-		block[0] ^= key[i&0b11];	//XOR first block by round key
+		block[0] ^= key[i&0b11] ^ i;	//XOR first block by round key
 		INV_S(&block[0]);	//Invert first block through S-box
 	}
 }
