@@ -9,6 +9,8 @@
 #include "seal.h"
 #include "seal_utility.h"
 
+
+
 int main(int argc, char** args){
 	if(sodium_init() < 0)	//Initialize Sodium Library
 		return -1;
@@ -26,6 +28,8 @@ int main(int argc, char** args){
 		seal_encrypt(block, key);
 	}
 	printf("Took %lf milleseconds to encrypt 160 million bytes...\n",stopClock());
+
+	find_sbox_differential_characteristic(sbox);
 
 	return 0;
 }

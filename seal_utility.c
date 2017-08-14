@@ -161,3 +161,42 @@ void test_block_divergence(size_t N, const uint32_t *key){
 	average_divergence /= (double)N;	//Find total average divergence
 	printf("Average Divergence across %lu samples: %lf%%\n", N, average_divergence*100.0);
 }
+
+/*
+	Test S-box differential characteristic.
+
+	NOTE:
+		Assumes box has 256 elements. If this is not the case, undefined behavior will ensue.
+*/
+void find_sbox_differential_characteristic(const uint8_t *box){
+	uint8_t table[256][256] = {{0}};	//The differential table
+
+	//Produce table of differential values
+	for(int i = 0; i < 256; i++){
+		for(int j = i+1; j < 256; j++){
+			int row = i ^ j;	//Compute the row
+			int col = box[i] ^ box[j];	//Compute the column
+
+			table[row][col]++;	//Increment cell
+		}
+	}
+
+	uint8_t input_differential;
+	uint8_t output_differential;
+	uint8_t count = 0;
+
+	for(int i = 0; i < 256; i++){
+		for(int j = 0; j < 256; j++){
+			if(table[i][j] > count){
+				count = table[i][j];
+				input_differential = (uint8_t)i;
+				output_differential = (uint8_t)j;
+			}
+		}
+	}
+
+	float probability = (float)count / 256.0;
+
+	printf("Across given S-box, the best differential characteristic %u-->%u holds true with a probability of %u/256 = %f.\n",
+			input_differential, output_differential, count, probability);
+}

@@ -66,6 +66,9 @@
 */
 #define ROUND_COUNT (8)
 
+extern uint8_t sbox[256];
+extern uint8_t inv_sbox[256];
+
 /*
 	Encrypt 128 bit block using SEAL:
 		Permutes the block against the provided key using the Simple Encryption ALgorithm.

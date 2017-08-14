@@ -78,7 +78,10 @@ void test_distribution(size_t N, const uint32_t *key);
 void test_block_divergence(size_t N, const uint32_t *key);
 
 /*
-	Test bit divergence for a particular block
+	Test S-box differential characteristic.
+
+	NOTE:
+		Assumes box has 256 elements. If this is not the case, undefined behavior will ensue.
 */
-void test_key_divergence(size_t N, const uint32_t *block);
+void find_sbox_differential_characteristic(const uint8_t *box);
 #endif
